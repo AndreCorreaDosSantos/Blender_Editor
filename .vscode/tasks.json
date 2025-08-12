@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Abrir Blender (GUI) com animar.py",
+      "type": "shell",
+      "command": "py",
+      "args": ["${workspaceFolder}\\main.py"],
+      "problemMatcher": []
+    }
+  ]
+}
