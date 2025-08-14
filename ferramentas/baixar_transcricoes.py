@@ -26,7 +26,14 @@ except (ValueError, IndexError):
 
 CAMINHO_LINKS = os.path.join(PASTA_LINKS, nome_arquivo)
 
-PASTA_DESTINO = os.path.join(os.path.dirname(__file__), "../estilo_agente_template/data/raw_transcripts")
+PASTA_DESTINO = os.path.join(os.path.dirname(__file__),
+    "..",
+    "agentes_de_estilo",
+    "estilo_agente_template",
+    "dados",
+    "brutas"
+)
+
 os.makedirs(PASTA_DESTINO, exist_ok=True)
 
 def extrair_video_id(url):

@@ -52,8 +52,8 @@ def extrair_nome_canal(canal_url):
 
 # ===== CONFIG =====
 canal_url = "https://www.youtube.com/@Laestro1"
-limite = 6
-tipo = "shorts"       # "videos" | "shorts" | "ambos"
+limite = 2
+tipo = "videos"       # "videos" | "shorts" | "ambos"
 # ===================
 
 nome_canal = extrair_nome_canal(canal_url)
