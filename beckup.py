@@ -97,3 +97,47 @@ if WAIT_INPUT:
         print("Seguindo")
     except Exception:
         pass
+
+
+
+
+
+import subprocess
+import os
+import re
+
+def get_links(canal_url, limite=5):
+    result = subprocess.run(
+        [
+            "yt-dlp",
+            "--flat-playlist",
+            "--playlist-end", str(limite),
+            "--get-id", canal_url
+        ],
+        capture_output=True, text=True
+    )
+    ids = result.stdout.strip().split("\n")
+    links = [f"https://www.youtube.com/watch?v={video_id}" for video_id in ids if video_id]
+    return links[:limite]  # 🧠 Corte final aqui, para garantir
+
+def extrair_nome_canal(canal_url):
+    match = re.search(r"youtube\.com/(@[\w\d_-]+)", canal_url)
+    if match:
+        return match.group(1).replace("@", "")
+    else:
+        return "canal_desconhecido"
+
+canal_url = "https://www.youtube.com/@ancap_su"
+limite = 6
+
+nome_canal = extrair_nome_canal(canal_url)
+VIDEOS = get_links(canal_url, limite=limite)
+
+base_path = os.path.dirname(os.path.abspath(__file__))
+arquivo_saida = os.path.join(base_path, f"links_{nome_canal}.txt")
+
+with open(arquivo_saida, "w", encoding="utf-8") as f:
+    for link in VIDEOS:
+        f.write(link + "\n")
+
+print(f"✅ {len(VIDEOS)} links salvos em '{arquivo_saida}'")

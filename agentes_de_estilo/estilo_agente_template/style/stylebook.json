@@ -1,0 +1,27 @@
+﻿{
+  "syntax": {
+    "avg_sentence_len": 12.5,
+    "short_sentence_rate": 0.6,
+    "long_sentence_rate": 0.1,
+    "question_mark_density": 0.2,
+    "exclamation_density": 0.3,
+    "ellipses_density": 0.15,
+    "preferred_paragraph_len": "curto"
+  },
+  "lexicon": {
+    "common_words": ["rapaz", "mermão", "bicho"],
+    "fillers_top": ["rapaz", "bicho"],
+    "catchphrases_top": ["bora vê, mermão", "quero vê, quero vá"],
+    "avoid_words": ["portanto", "em suma", "é importante ressaltar"]
+  },
+  "discourse": {
+    "tone": ["indignado", "irônico"],
+    "rhetoric": ["pergunta_retórica", "hipérbole", "exemplo_cotidiano"],
+    "structure": ["abre_indignado", "exemplo_no_meio", "fecha_forte"]
+  },
+  "formatting": {
+    "uses_emojis": false,
+    "caps_emphasis": false,
+    "line_break_style": "paragrafos_curtos"
+  }
+}

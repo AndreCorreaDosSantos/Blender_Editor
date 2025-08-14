@@ -6,7 +6,7 @@ BASE = Path(__file__).resolve().parent
 SCRIPT = BASE / "animar.py"  # <<< cuidado com 'python' (sem 'pythoon')
 
 env = os.environ.copy()
-env["PROJECT_NAME"] = "Projeto_Teste_01"
+env["PROJECT_NAME"] = "Projeto_Teste"
 
 # FORMATOS:
 #   16x9  → YouTube (horizontal), Facebook horizontal
