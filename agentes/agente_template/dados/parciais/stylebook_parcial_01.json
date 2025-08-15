@@ -1,0 +1,52 @@
+{
+  "tom": "informal",
+  "humor": "sarcástico",
+  "ritmo": "dinâmico",
+  "vicios_expressao": [],
+  "marcadores_discurso": [
+    {
+      "texto": "Pois é",
+      "frequencia_estimada": "alta"
+    },
+    {
+      "texto": "relaxa e agacha",
+      "frequencia_estimada": "alta"
+    },
+    {
+      "texto": "eu acho",
+      "frequencia_estimada": "media"
+    }
+  ],
+  "bordoes": [],
+  "interjeicoes": [
+    {
+      "texto": "né"
+    },
+    {
+      "texto": "sim"
+    },
+    {
+      "texto": "ou não"
+    }
+  ],
+  "temas_recorrentes": [
+    {
+      "tema": "violência"
+    },
+    {
+      "tema": "política"
+    },
+    {
+      "tema": "internet"
+    }
+  ],
+  "pontuacoes_enfase": {
+    "caixa_alta": "baixa",
+    "pausas_elongadas": "media"
+  },
+  "exemplos_representativos": [
+    "A garota punk que espancou o aluno",
+    "o Bolsonaro foi preso e o mundo reagiu"
+  ],
+  "confianca_global": 0.8
+}

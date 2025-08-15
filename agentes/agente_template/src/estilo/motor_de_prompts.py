@@ -1,33 +1,49 @@
-﻿import json
-from pathlib import Path
+﻿import os
+from dotenv import load_dotenv
+from string import Template
+from openai import OpenAI
+from agentes.agente_template.src.utils.prompts import PROMPTS
 
-def load_stylebook():
-    return json.loads((Path(__file__).parent.parent / "style" / "stylebook.json").read_text(encoding="utf-8"))
+# 🔑 carrega as variáveis do arquivo .env
+load_dotenv()
 
-def load_few_shots():
-    path = Path(__file__).parent.parent / "style" / "few_shots"
-    return [p.read_text(encoding="utf-8").strip() for p in path.glob("*.txt")]
 
-def gerar_prompt(dados):
-    style = load_stylebook()
-    shots = load_few_shots()
-
-    prompt = f"""
-Você vai escrever um texto opinativo que pareça 100% humano.
-
-Título: {dados['titulo']}
-Fonte: {dados['fonte']}
-Data: {dados['data']}
-
-Texto-base:
-{dados['corpo']}
-
-Use o estilo: {json.dumps(style, indent=2, ensure_ascii=False)}
-
-Exemplos:
-{chr(10).join(shots)}
-
-[SAÍDA ESPERADA]
-Texto curto a médio, natural, com tom emocional. Sem frases típicas de IA.
+# -*- coding: utf-8 -*-
 """
-    return prompt
+motor_de_prompts.py — camada que conversa com a IA
+"""
+
+
+# se for usar OpenAI oficial
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+def preencher_prompt(chave: str, variaveis: dict) -> str:
+    """
+    Substitui {{variavel}} no template pelo valor de variaveis["variavel"].
+    Usa string.Template para maior robustez.
+    """
+    if chave not in PROMPTS:
+        raise KeyError(f"Prompt '{chave}' não encontrado em prompts.py")
+
+    template = PROMPTS[chave]
+
+    # converte {{x}} -> $x (compatível com Template)
+    template = template.replace("{{", "${").replace("}}", "}")
+    return Template(template).safe_substitute(**variaveis)
+
+def gerar(chave: str, variaveis: dict, model="gpt-4o-mini") -> str:
+    """
+    Gera saída da IA a partir de uma chave de prompt e variáveis.
+    """
+    prompt = preencher_prompt(chave, variaveis)
+
+    response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": "Você é um especialista em análise de estilo."},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.7,
+    )
+
+    return response.choices[0].message.content.strip()

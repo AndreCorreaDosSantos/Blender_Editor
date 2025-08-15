@@ -1,0 +1,71 @@
+﻿Estrutura de: C:\Users\Tabajara\Documents\Python\Blender_Editor
+
+|- animar.py
+|- beckup.py
+|- estrutura.txt
+|- gerar_estrutura.ps1
+|- main.py
+|- README.md
+|- .vscode
+  |- launch.json
+  |- settings.json
+  |- tasks.json
+|- agentes
+  |- criar_agente.py
+  |- README.md
+  |- agente_template
+    |- __init__.py
+    |- __pycache__
+      |- __init__.cpython-313.pyc
+    |- dados
+      |- brutas
+        |- A BELEZA DO HORROR RELIGIOSO.txt
+        |- A GAROTA PUNK QUE 3SP4NCOU UM NA...!! #noticias #meme.txt
+        |- A PRISÃO DO BOLSONARO AFETOU OS EUA #memes #preso.txt
+        |- O FELCA PROCESSOU 200 PESSOAS! #felca #processo.txt
+        |- O HYTALO SANTOS VAI SER PRESO! #prisão #memes.txt
+        |- O INFLUENCIADOR QUE FOI PRESO E GRAVOU NA PRISÃO!.txt
+        |- PRESO POR DESENHAR O MORAES NO OV! #alexandredemoraes #meme.txt
+        |- TIERLIST DOS MEMES DE 2024!! FT. LOCOMOTIVA E HARACI!! - ESPECIAL DE 300K.txt
+      |- limpas
+        |- A BELEZA DO HORROR RELIGIOSO.txt
+        |- A GAROTA PUNK QUE 3SP4NCOU UM NA...!! #noticias #meme.txt
+        |- A PRISÃO DO BOLSONARO AFETOU OS EUA #memes #preso.txt
+        |- O FELCA PROCESSOU 200 PESSOAS! #felca #processo.txt
+        |- O HYTALO SANTOS VAI SER PRESO! #prisão #memes.txt
+        |- O INFLUENCIADOR QUE FOI PRESO E GRAVOU NA PRISÃO!.txt
+        |- PRESO POR DESENHAR O MORAES NO OV! #alexandredemoraes #meme.txt
+        |- TIERLIST DOS MEMES DE 2024!! FT. LOCOMOTIVA E HARACI!! - ESPECIAL DE 300K.txt
+    |- src
+      |- __init__.py
+      |- __pycache__
+        |- __init__.cpython-313.pyc
+      |- estilo
+        |- __init__.py
+        |- avaliador_de_estilo.py
+        |- minerar_estilo.py
+        |- motor_de_prompts.py
+      |- geracao
+        |- __init__.py
+        |- aprimorar_texto.py
+        |- gerador.py
+        |- planejador.py
+      |- utils
+        |- __init__.py
+        |- arquivos.py
+        |- limpeza.py
+        |- prompts.py
+        |- texto.py
+        |- __pycache__
+          |- __init__.cpython-313.pyc
+          |- limpeza.cpython-313.pyc
+|- editor
+  |- __init__.py
+  |- inicializar_vse.py
+  |- trilhas_template.py
+|- ferramentas
+  |- baixar_links.py
+  |- baixar_transcricoes.py
+  |- links_ancap_su.txt
+  |- links_Laestro1_shorts.txt
+  |- links_Laestro1_videos.txt

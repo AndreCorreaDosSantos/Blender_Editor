@@ -1,0 +1,62 @@
+{
+  "tom": "informal",
+  "humor": "sarcástico",
+  "ritmo": "dinâmico",
+  "vicios_expressao": [],
+  "marcadores_discurso": [
+    {
+      "texto": "Pois é",
+      "peso": 0.8
+    },
+    {
+      "texto": "relaxa e agacha",
+      "peso": 0.8
+    },
+    {
+      "texto": "eu acho",
+      "peso": 0.5
+    }
+  ],
+  "bordoes": [],
+  "interjeicoes": [
+    {
+      "texto": "né",
+      "peso": 0.5
+    },
+    {
+      "texto": "sim",
+      "peso": 0.5
+    },
+    {
+      "texto": "ou não",
+      "peso": 0.5
+    }
+  ],
+  "temas_recorrentes": [
+    {
+      "tema": "violência",
+      "peso": 0.8
+    },
+    {
+      "tema": "política",
+      "peso": 0.8
+    },
+    {
+      "tema": "internet",
+      "peso": 0.8
+    }
+  ],
+  "pontuacoes_enfase": {
+    "caixa_alta": "baixa",
+    "pausas_elongadas": "media"
+  },
+  "exemplos_representativos": [
+    "A garota punk que espancou o aluno",
+    "o Bolsonaro foi preso e o mundo reagiu"
+  ],
+  "observacoes": null,
+  "confianca_global": 0.8,
+  "versao": "2.0-blocos",
+  "gerado_em": "2025-08-15T14:28:24.293317",
+  "_fonte": "fusão_de_blocos"
+}
