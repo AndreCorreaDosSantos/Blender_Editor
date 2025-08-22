@@ -34,6 +34,13 @@ from typing import Any, Dict, List, Optional
 from string import Template
 
 # ==========================
+# CONFIGURAÇÕES PADRÃO
+# ==========================
+DEFAULT_MODEL = "gpt-4o-mini" # Ex.: gpt-4o, gpt-4o-mini, gpt-4.1, gpt-4.1-mini
+DEFAULT_IDIOMA = "pt-BR"  # pt-BR, en-US, es-ES
+DEFAULT_MAX_ITENS = 25          # Ex.: 10, 15, 20, 25 Máximo de itens por lista nos parciais.
+
+# ==========================
 # LIMPEZA (de limpeza.py)
 # ==========================
 RE_TIMECODE = re.compile(r'\\b\\d{1,2}:\\d{2}(?::\\d{2})?\\b')
@@ -189,11 +196,11 @@ class StyleMiner:
     saida_final: Optional[Path] = None
 
     # Execução
-    max_chars: int = 6000
+    max_chars: int = 1500
     engine: Optional[PromptEngine] = None
     salvar_parciais: bool = True
     idioma: str = "pt-BR"
-    max_itens: int = 10
+    max_itens: int = 25
     clean_first: bool = False  # usar limpeza adicional antes da blocagem
 
     def __post_init__(self):
@@ -363,10 +370,10 @@ def _build_parser() -> argparse.ArgumentParser:
 
     # minerar
     ap_mine = sub.add_parser("minerar", help="Executa pipeline de mineração e gera stylebook.json")
-    ap_mine.add_argument("--max_chars", type=int, default=6000, help="Tamanho máximo de cada bloco (chars).")
-    ap_mine.add_argument("--model", type=str, default="gpt-4o-mini", help="Modelo OpenAI (ex.: gpt-4o, gpt-4o-mini).")
-    ap_mine.add_argument("--idioma", type=str, default="pt-BR", help="Idioma de saída (ex.: pt-BR).")
-    ap_mine.add_argument("--max_itens", type=int, default=10, help="Máximo de itens por lista nos parciais.")
+    ap_mine.add_argument("--max_chars", type=int, default=2000, help="Tamanho máximo de cada bloco (chars).")
+    ap_mine.add_argument("--model", type=str, default=DEFAULT_MODEL, help="Modelo OpenAI (ex.: gpt-4o, gpt-4o-mini).")
+    ap_mine.add_argument("--idioma", type=str, default=DEFAULT_IDIOMA, help="Idioma de saída (ex.: pt-BR, en-US, es-ES).")
+    ap_mine.add_argument("--max_itens", type=int, default=DEFAULT_MAX_ITENS, help="Máximo de itens por lista nos parciais.")
     ap_mine.add_argument("--clean_first", action="store_true", help="Aplicar limpeza adicional antes da blocagem.")
     ap_mine.add_argument("--no_partials", action="store_true", help="Não salvar parciais.")
     # caminhos
