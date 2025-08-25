@@ -28,8 +28,8 @@ CAMINHO_LINKS = os.path.join(PASTA_LINKS, nome_arquivo)
 
 PASTA_DESTINO = os.path.join(os.path.dirname(__file__),
     "..",
-    "agentes_de_estilo",
-    "estilo_agente_template",
+    "agentes",
+    "agente_template",
     "dados",
     "brutas"
 )

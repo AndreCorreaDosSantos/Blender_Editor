@@ -1,52 +1,107 @@
 {
-  "tom": "informal",
-  "humor": "sarcástico",
-  "ritmo": "dinâmico",
-  "vicios_expressao": [],
-  "marcadores_discurso": [
+  "tom": "irônico",
+  "humor": "escatológico",
+  "ritmo": "rápido",
+  "ritmo_comico": "misto",
+  "estruturas_piada": [
     {
-      "texto": "Pois é",
-      "frequencia_estimada": "alta"
+      "formato": "setup_punch",
+      "exemplo": "E sim, esse vídeo viralizou porque os gordos não calam a boca.",
+      "marcadores_lexicais": [
+        "viralizou",
+        "gordos",
+        "não calam"
+      ]
     },
     {
-      "texto": "relaxa e agacha",
-      "frequencia_estimada": "alta"
+      "formato": "setup_punch",
+      "exemplo": "É, meus amigos, eu nem ia falar de política, mas eles mexeram com os meus geradores de dopamin.",
+      "marcadores_lexicais": [
+        "política",
+        "geradores de dopamin"
+      ]
     },
     {
-      "texto": "eu acho",
-      "frequencia_estimada": "media"
+      "formato": "setup_punch",
+      "exemplo": "O cara deu um total de zero segundos pra oposição responder.",
+      "marcadores_lexicais": [
+        "zero segundos",
+        "oposição",
+        "responder"
+      ]
+    },
+    {
+      "formato": "setup_punch",
+      "exemplo": "E sim, para sobreviver, a gente viu que recentemente a ex-esposa dele começou a vender algodão doce na rua.",
+      "marcadores_lexicais": [
+        "sobreviver",
+        "vender",
+        "algodão doce"
+      ]
     }
   ],
-  "bordoes": [],
+  "gatilhos_comicos": [
+    {
+      "tipo": "incongruencia",
+      "intensidade": "alta",
+      "exemplo": "Mas se você não viu nada disso, relaxa e agacha que eu vou te explicar tudinho."
+    },
+    {
+      "tipo": "absurdo",
+      "intensidade": "alta",
+      "exemplo": "O fofinho e rchonchudinho do Manuel Gomes deu uma cagada cremosa na cara da ex-mulher dele."
+    }
+  ],
+  "moldes_frasais": [
+    {
+      "molde": "Mas se você não viu nada disso, relaxa e agacha que eu vou te explicar tudinho.",
+      "uso": "abrir_setup"
+    }
+  ],
+  "vicios_expressao": [
+    {
+      "texto": "merda",
+      "exemplo": "E sim, esse vídeo viralizou porque os gordos não calam a boca."
+    }
+  ],
+  "marcadores_discurso": [
+    {
+      "texto": "cara",
+      "frequencia_estimada": "alta"
+    },
+    {
+      "texto": "tipo",
+      "frequencia_estimada": "alta"
+    }
+  ],
+  "bordoes": [
+    {
+      "texto": "relaxa e agacha",
+      "exemplo": "Mas se você não viu nada disso, relaxa e agacha que eu vou te explicar tudinho."
+    }
+  ],
   "interjeicoes": [
     {
-      "texto": "né"
-    },
-    {
-      "texto": "sim"
-    },
-    {
-      "texto": "ou não"
+      "texto": "[ __ ]"
     }
   ],
   "temas_recorrentes": [
     {
-      "tema": "violência"
+      "tema": "gordofobia"
     },
     {
       "tema": "política"
     },
     {
-      "tema": "internet"
+      "tema": "relacionamentos"
     }
   ],
   "pontuacoes_enfase": {
-    "caixa_alta": "baixa",
+    "caixa_alta": "alta",
     "pausas_elongadas": "media"
   },
   "exemplos_representativos": [
-    "A garota punk que espancou o aluno",
-    "o Bolsonaro foi preso e o mundo reagiu"
+    "O cara esperou a mulher dele sair pro mercado e fugiu pros Estados Unidos."
   ],
-  "confianca_global": 0.8
+  "confianca_global": 0.85
 }

@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 """
 estilo_pipeline.py — Arquivo ÚNICO com tudo junto (limpeza + prompts + mineração + gerador)
@@ -36,21 +35,21 @@ from string import Template
 # ==========================
 # CONFIGURAÇÕES PADRÃO
 # ==========================
-DEFAULT_MODEL = "gpt-4o-mini" # Ex.: gpt-4o, gpt-4o-mini, gpt-4.1, gpt-4.1-mini
-DEFAULT_IDIOMA = "pt-BR"  # pt-BR, en-US, es-ES
-DEFAULT_MAX_ITENS = 25          # Ex.: 10, 15, 20, 25 Máximo de itens por lista nos parciais.
+DEFAULT_MODEL = "gpt-4o-mini"  # Ex.: gpt-4o, gpt-4o-mini, gpt-4.1, gpt-4.1-mini
+DEFAULT_IDIOMA = "pt-BR"       # pt-BR, en-US, es-ES
+DEFAULT_MAX_ITENS = 25         # Máximo de itens por lista nos parciais.
 
 # ==========================
 # LIMPEZA (de limpeza.py)
 # ==========================
-RE_TIMECODE = re.compile(r'\\b\\d{1,2}:\\d{2}(?::\\d{2})?\\b')
-RE_BRACKETS = re.compile(r'\\[(?:aplausos|música|risos|music|applause|laughs|inaudível).*?\\]', re.I)
+RE_TIMECODE = re.compile(r'\b\d{1,2}:\d{2}(?::\d{2})?\b')
+RE_BRACKETS = re.compile(r'\[(?:aplausos|música|risos|music|applause|laughs|inaudível).*?\]', re.I)
 
 def limpar_texto_bruto(texto: str) -> str:
     """Remove timecodes, marcações e espaçamento excessivo."""
     texto = RE_TIMECODE.sub("", texto)
     texto = RE_BRACKETS.sub("", texto)
-    return re.sub(r'\\s+', ' ', texto).strip()
+    return re.sub(r'\s+', ' ', texto).strip()
 
 # ==========================
 # PROMPTS (de prompts.py)
@@ -69,12 +68,28 @@ REGRAS:
 - Se não tiver evidência, use null ou [].
 - Limite cada lista ao máximo de {{max_itens|10}} itens, ordenados por relevância.
 - Não invente; baseie-se no trecho fornecido.
+- Priorize detectar estrutura de piada (setup → incongruência → punch) e aponte frases candidatas a punch em "estruturas_piada.exemplo".
+- Se detectar "lista de três" ou "callback", reflita em "ritmo_comico" e "estruturas_piada.formato".
 
 SCHEMA DE RESPOSTA (copie a estrutura exatamente):
 {
   "tom": "string | null",
   "humor": "string | null",
   "ritmo": "string | null",
+  "ritmo_comico": "setup_curto_punch_rapido|punch_tardio|lista_de_tres|escada|improviso|misto|null",
+  "estruturas_piada": [
+    {"formato": "setup_punch|ironia_seca|hiperbole|comparacao_absurda|callback|anti_humor|sarcasmo|observacional",
+     "exemplo": "string",
+     "marcadores_lexicais": ["string", "string"]}
+  ],
+  "gatilhos_comicos": [
+    {"tipo": "incongruencia|tabu|insulto|auto_depreciacao|escatologia|política|absurdo",
+     "intensidade": "baixa|media|alta",
+     "exemplo": "string"}
+  ],
+  "moldes_frasais": [
+    {"molde": "Sabe o que é pior? ...", "uso": "transição_para_punch|abrir_setup|fechar_com_zombaria"}
+  ],
   "vicios_expressao": [{"texto": "string", "exemplo": "string"}],
   "marcadores_discurso": [{"texto": "string", "frequencia_estimada": "baixa|media|alta"}],
   "bordoes": [{"texto": "string", "exemplo": "string"}],
@@ -84,7 +99,7 @@ SCHEMA DE RESPOSTA (copie a estrutura exatamente):
     "caixa_alta": "baixa|media|alta|null",
     "pausas_elongadas": "baixa|media|alta|null"
   },
-  "exemplos_representativos": ["string", "string"],
+  "exemplos_representativos": ["string"],
   "confianca_global": 0.0
 }
 
@@ -104,12 +119,17 @@ TAREFA:
 - Limite cada lista ao máximo de {{max_itens|15}} itens, ordenados por relevância.
 - Forneça um campo de "confianca_global" (0–1) considerando concordância entre parciais.
 - Se houver conflito, escolha o consenso; se não houver, mantenha as duas visões com nota breve em "observacoes".
+- Agregue “estruturas_piada”, “gatilhos_comicos” e “moldes_frasais” somando recorrência; deduplique por forma e sinônimos.
 
 SCHEMA FINAL (copie a estrutura exatamente):
 {
   "tom": "string | null",
   "humor": "string | null",
   "ritmo": "string | null",
+  "ritmo_comico": "setup_curto_punch_rapido|punch_tardio|lista_de_tres|escada|improviso|misto|null",
+  "estruturas_piada": [{"formato": "string", "exemplo": "string", "marcadores_lexicais": ["string"], "peso": 0.0}],
+  "gatilhos_comicos": [{"tipo": "string", "intensidade": "baixa|media|alta", "exemplo": "string", "peso": 0.0}],
+  "moldes_frasais": [{"molde": "string", "uso": "string", "peso": 0.0}],
   "vicios_expressao": [{"texto": "string", "exemplo": "string"}],
   "marcadores_discurso": [{"texto": "string", "peso": 0.0}],
   "bordoes": [{"texto": "string", "exemplo": "string", "peso": 0.0}],
@@ -133,7 +153,7 @@ INSUMOS (lista de JSONs parciais):
 # ==========================
 @dataclass
 class PromptEngine:
-    model: str = "gpt-4o-mini"
+    model: str = DEFAULT_MODEL
     system_prompt: str = "Você é um especialista em análise de estilo."
     api_key_env: str = "OPENAI_API_KEY"
 
@@ -174,14 +194,24 @@ class PromptEngine:
 
     def gerar(self, chave: str, variaveis: Dict[str, Any]) -> str:
         prompt = self.preencher_prompt(chave, variaveis)
-        resp = self._client.chat.completions.create(
+        force_json = chave.startswith("MINERAR_")
+
+        kwargs = dict(
             model=self.model,
             messages=[
                 {"role": "system", "content": self.system_prompt},
                 {"role": "user", "content": prompt},
             ],
-            temperature=0.7,
+            temperature=0.2 if force_json else 0.7,
         )
+        # Tenta ativar response_format JSON quando aplicável
+        if force_json:
+            try:
+                kwargs["response_format"] = {"type": "json_object"}  # pode não estar disponível em SDK antigo
+            except Exception:
+                pass
+
+        resp = self._client.chat.completions.create(**kwargs)  # type: ignore
         return (resp.choices[0].message.content or "").strip()
 
 # ==========================
@@ -199,14 +229,14 @@ class StyleMiner:
     max_chars: int = 1500
     engine: Optional[PromptEngine] = None
     salvar_parciais: bool = True
-    idioma: str = "pt-BR"
-    max_itens: int = 25
+    idioma: str = DEFAULT_IDIOMA
+    max_itens: int = DEFAULT_MAX_ITENS
     clean_first: bool = False  # usar limpeza adicional antes da blocagem
 
     def __post_init__(self):
         # Define caminhos padrão se não informados
         if self.base_dir is None:
-            # arquivo normalmente em .../src/estilo/ → sobe 2 níveis → .../agente_template/
+            # arquivo normalmente em .../src/ → sobe 2 níveis → .../agente_template/
             self.base_dir = Path(__file__).resolve().parents[1]
         if self.limpas_dir is None:
             self.limpas_dir = self.base_dir / "dados" / "limpas"
@@ -223,9 +253,17 @@ class StyleMiner:
 
     # ---------- utilidades ----------
     @staticmethod
+    def _strip_code_fences(payload: str) -> str:
+        txt = payload.strip()
+        if txt.startswith("```"):
+            txt = re.sub(r"^```(?:json)?\s*|\s*```$", "", txt, flags=re.I | re.M)
+        return txt
+
+    @staticmethod
     def _json_load_safely(payload: str) -> Any:
         try:
-            return json.loads(payload)
+            txt = StyleMiner._strip_code_fences(payload)
+            return json.loads(txt)
         except Exception:
             return {"_erro_parse_json": True, "_amostra_resposta": (payload or "")[:1000]}
 
@@ -235,12 +273,12 @@ class StyleMiner:
         for linha in texto.splitlines():
             ln = linha or ""
             if tamanho + len(ln) > max_chars and atual:
-                blocos.append("\\n".join(atual))
+                blocos.append("\n".join(atual))
                 atual, tamanho = [], 0
             atual.append(ln)
             tamanho += len(ln)
         if atual:
-            blocos.append("\\n".join(atual))
+            blocos.append("\n".join(atual))
         return blocos
 
     # ---------- etapas ----------
@@ -252,7 +290,7 @@ class StyleMiner:
             if self.clean_first:
                 t = limpar_texto_bruto(t)
             textos.append(t)
-        corpus = "\\n\\n".join(textos).strip()
+        corpus = "\n\n".join(textos).strip()
         if not corpus:
             raise RuntimeError(
                 f"Nenhum texto encontrado em {self.limpas_dir}. "
@@ -347,7 +385,6 @@ class StyleGenerator:
     def montar_contexto_estilo(self, sb: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         Extrai partes úteis do stylebook para prompts de geração.
-        Igual ao gerador.py original, com pequenas proteções.
         """
         if sb is None:
             sb = self.carregar_stylebook()
@@ -355,6 +392,10 @@ class StyleGenerator:
             "tom": sb.get("tom"),
             "humor": sb.get("humor"),
             "ritmo": sb.get("ritmo"),
+            "ritmo_comico": sb.get("ritmo_comico"),
+            "moldes_de_piada": [m.get("molde") for m in sb.get("moldes_frasais", []) if isinstance(m, dict) and m.get("molde")],
+            "estruturas_piada": [e.get("formato") for e in sb.get("estruturas_piada", []) if isinstance(e, dict) and e.get("formato")],
+            "gatilhos_comicos": [g.get("tipo") for g in sb.get("gatilhos_comicos", []) if isinstance(g, dict) and g.get("tipo")],
             "marcadores": [m.get("texto") for m in sb.get("marcadores_discurso", []) if isinstance(m, dict) and m.get("texto")],
             "bordoes": [b.get("texto") for b in sb.get("bordoes", []) if isinstance(b, dict) and b.get("texto")],
             "interjeicoes": [i.get("texto") for i in sb.get("interjeicoes", []) if isinstance(i, dict) and i.get("texto")],
@@ -370,7 +411,7 @@ def _build_parser() -> argparse.ArgumentParser:
 
     # minerar
     ap_mine = sub.add_parser("minerar", help="Executa pipeline de mineração e gera stylebook.json")
-    ap_mine.add_argument("--max_chars", type=int, default=2000, help="Tamanho máximo de cada bloco (chars).")
+    ap_mine.add_argument("--max_chars", type=int, default=4000, help="Tamanho máximo de cada bloco (chars).")
     ap_mine.add_argument("--model", type=str, default=DEFAULT_MODEL, help="Modelo OpenAI (ex.: gpt-4o, gpt-4o-mini).")
     ap_mine.add_argument("--idioma", type=str, default=DEFAULT_IDIOMA, help="Idioma de saída (ex.: pt-BR, en-US, es-ES).")
     ap_mine.add_argument("--max_itens", type=int, default=DEFAULT_MAX_ITENS, help="Máximo de itens por lista nos parciais.")

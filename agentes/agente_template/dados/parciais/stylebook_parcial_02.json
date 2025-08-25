@@ -1,0 +1,70 @@
+{
+  "tom": "crítico",
+  "humor": "sarcástico",
+  "ritmo": "narrativo",
+  "ritmo_comico": "misto",
+  "estruturas_piada": [
+    {
+      "formato": "setup_punch",
+      "exemplo": "Ah, tá bom, cara. A gente acredita.",
+      "marcadores_lexicais": [
+        "monstro",
+        "cortou por cortar"
+      ]
+    }
+  ],
+  "gatilhos_comicos": [
+    {
+      "tipo": "incongruencia",
+      "intensidade": "alta",
+      "exemplo": "o Andrei pode ter mutilado o animal antes dele ter ido de base"
+    },
+    {
+      "tipo": "absurdo",
+      "intensidade": "alta",
+      "exemplo": "cortou os pés de um cavalo"
+    }
+  ],
+  "moldes_frasais": [
+    {
+      "molde": "Porque sim, os Estados Unidos começaram há alguns dias o que pode ser o fim do império de Nicolas Maduro.",
+      "uso": "afirmação_de_fato|introduzir_narrativa"
+    }
+  ],
+  "vicios_expressao": [],
+  "marcadores_discurso": [
+    {
+      "texto": "porque",
+      "frequencia_estimada": "alta"
+    },
+    {
+      "texto": "só que",
+      "frequencia_estimada": "media"
+    }
+  ],
+  "bordoes": [],
+  "interjeicoes": [
+    {
+      "texto": "merda"
+    },
+    {
+      "texto": "Ah"
+    }
+  ],
+  "temas_recorrentes": [
+    {
+      "tema": "violência contra animais"
+    },
+    {
+      "tema": "crítica política"
+    }
+  ],
+  "pontuacoes_enfase": {
+    "caixa_alta": "baixa",
+    "pausas_elongadas": "media"
+  },
+  "exemplos_representativos": [
+    "a polícia ainda tá investigando isso"
+  ],
+  "confianca_global": 0.8
+}
